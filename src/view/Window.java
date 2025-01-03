@@ -33,7 +33,18 @@ public class Window extends JFrame {
         controller.populateJComboBox(currency1);
         controller.populateJComboBox(currency2);
 
+
         convertBtn = new JButton("Convert");
+        convertBtn.addActionListener( e -> {
+
+            String fromCurrency = (String) currency1.getSelectedItem();
+            String toCurrency = (String) currency2.getSelectedItem();
+
+            double result = controller.convert(textField, fromCurrency, toCurrency);
+            String message = String.format("%s from %s to %s is %.2f",
+                    textField.getText(), fromCurrency, toCurrency, result);
+            JOptionPane.showMessageDialog(null, message);
+        });
 
         panel.add(new JLabel("Value: "));
         panel.add(textField);

@@ -20,6 +20,35 @@ public class CurrencyHandler {
         populateCurrencies();
     }
 
+    public Map<String, Currency> getCurrencies() {
+        return currencies;
+    }
+
+    public Map<String, String> getCurrenciesName() {
+        return currenciesName;
+    }
+
+    public double convert(JTextField textField, String fromCurrency, String toCurrency) {
+        double amount = parseToDouble(textField.getText());
+
+        if (amount <= 0.0) return 0.0;
+
+        Currency fromCurrencyObject = currencies.get(fromCurrency);
+        String isoCode = currenciesName.get(toCurrency);
+        Double rate = fromCurrencyObject.getConversionRate(isoCode);
+
+        return amount * rate;
+    }
+
+    private double parseToDouble(String text) {
+        try {
+            return Double.parseDouble(text);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Please enter a valid numeric value", "Error", JOptionPane.ERROR_MESSAGE);
+            return 0.0;
+        }
+    }
+
     private void loadCurrencies() {
         try (FileReader reader = new FileReader("src/model/currencies.json")) {
             Gson gson = new Gson();
