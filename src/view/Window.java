@@ -1,5 +1,7 @@
 package view;
 
+import controller.CurrencyHandler;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,10 +11,11 @@ public class Window extends JFrame {
     JComboBox<String> currency1;
     JComboBox<String> currency2;
     JButton convertBtn;
+    CurrencyHandler controller = new CurrencyHandler();
 
     public Window() {
         setTitle("Currency Converter");
-        setSize(400,300);
+        setSize(400,200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
@@ -26,6 +29,9 @@ public class Window extends JFrame {
 
         currency1 = new JComboBox<>();
         currency2 = new JComboBox<>();
+
+        controller.populateJComboBox(currency1);
+        controller.populateJComboBox(currency2);
 
         convertBtn = new JButton("Convert");
 

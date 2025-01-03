@@ -12,20 +12,24 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 
-public class APIService {
+public class APIController {
     String apiKey;
     String baseURL;
     HttpClient client;
+    Currency currency;
+    private String[] allowedCurrency;
 
-    public APIService() {
+
+    public APIController() {
         apiKey = "bf596819cf019e0225e3a52b";
         baseURL = "https://v6.exchangerate-api.com/v6/";
         client = HttpClient.newHttpClient();
+        allowedCurrency = new String[]{"USD", "BRL", "ARS", "COP", "CLP", "PEN", "BOB"};
+
     }
 
-    public Currency creatCurrency(String baseCode){
+    public Currency createCurrency(String baseCode){
         String endpoint = baseURL + apiKey + "/latest/" + baseCode;
-        System.out.println("Endpoint: " + endpoint);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(endpoint))
@@ -40,7 +44,9 @@ public class APIService {
                         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                         .setPrettyPrinting()
                         .create();
-                return gson.fromJson(response.body(),Currency.class);
+                currency = gson.fromJson(response.body(),Currency.class);
+                currency.filterConversionRates(allowedCurrency);
+                return currency;
             }
             return null;
 
